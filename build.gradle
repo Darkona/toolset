@@ -1,0 +1,138 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.3'
+    id 'io.spring.dependency-management' version '1.1.5'
+}
+
+group = 'com.darkona'
+version = '1'
+
+def yellowLine = "Hello, World!"
+def blueLine = "Dinosaurs"
+def date = new Date().format('yyyy-MM-dd HH:mm:ss')
+
+project.ext.setProperty("yellowLine", "${yellowLine}")
+project.ext.setProperty("blueLine", "${blueLine}")
+project.ext.setProperty("redLine", "Tyrannosaurus Rex")
+project.ext.setProperty("greenLine", "Brachiosaurus")
+project.ext.setProperty("buildDate", "${date}")
+project.ext.setProperty("gradleVersion", "${gradle.gradleVersion}")
+project.ext.setProperty("javaVersion", "${JavaVersion.current().toString()}")
+
+ext {
+    set('gradleVersion', gradle.gradleVersion)
+}
+
+processResources {
+
+    outputs.upToDateWhen { false }
+
+    filesMatching('application.y*ml') {
+        expand project.properties
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+wrapper {
+    gradleVersion = '8.8'
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+    compileJava {
+        options.encoding = 'UTF-8'
+        options.compilerArgs += [
+                '-parameters'
+        ]
+    }
+    // withJavadocJar()
+    // withSourcesJar()
+}
+
+build {
+    dependsOn processResources
+}
+def filename = "${rootProject.name}-${this.version}.jar"
+
+jar {
+    enabled = false
+    archiveFileName = filename
+    manifest {
+        attributes('Main-Class': 'com.darkona.toolset.App')
+    }
+
+}
+
+bootJar {
+    archiveFileName = filename
+    mainClass = 'com.darkona.toolset.App'
+}
+
+springBoot {
+    buildInfo{
+        properties {
+            group = project.group
+            artifact = project.name
+            version = project.version
+            name = project.name
+        }
+    }
+}
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2023.0.2")
+}
+
+dependencies {
+
+    implementation "org.springframework.boot:spring-boot-starter-log4j2"
+    modules {
+        module("org.springframework.boot:spring-boot-starter-logging") {
+            replacedBy("org.springframework.boot:spring-boot-starter-log4j2", "Use Log4j2 instead of Logback")
+        }
+    }
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.apache.commons:commons-lang3:3.14.0'
+    implementation 'org.fusesource.jansi:jansi:2.4.1'
+    implementation 'net.datafaker:datafaker:2.3.0'
+    annotationProcessor 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

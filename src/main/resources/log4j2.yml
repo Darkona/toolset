@@ -1,0 +1,15 @@
+Configuration:
+  status: error
+  Appenders:
+    Console:
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "%style{%d{yyyy-MM-dd HH:mm:ss}}{blue} %highlight{%level} %-50logger{48} - %msg%n"
+        disableAnsi: false
+        # noConsoleNoAnsi: true
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: Console

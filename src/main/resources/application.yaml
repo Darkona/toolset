@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: Darkona's Toolset
+  output:
+    ansi:
+      enabled: always
+  mvc:
+    problemdetails:
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+
+logging:
+  charset:
+    console: UTF-8
+
+custom:
+  application:
+    yellow: ${yellowLine}
+    blue: ${blueLine}
+    red: ${redLine} and ${greenLine}
+    buildDate: ${buildDate}
+    gradleVersion: ${gradleVersion}
+
+server:
+  error:
+    include-binding-errors: always

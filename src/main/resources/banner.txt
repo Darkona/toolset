@@ -1,0 +1,10 @@
+${AnsiColor.YELLOW}${custom.application.yellow}${AnsiColor.DEFAULT}
+${AnsiColor.BLUE}${custom.application.blue}${AnsiColor.DEFAULT}
+${AnsiColor.RED}Dinosaurs: ${custom.application.red}${AnsiColor.DEFAULT}
+${AnsiColor.GREEN}Built on: ${custom.application.buildDate}${AnsiColor.DEFAULT}
+${AnsiColor.CYAN}Gradle Version: ${custom.application.gradleVersion}${AnsiColor.DEFAULT}
+${spring.application.name}
+Powered by SpringBoot: ${spring-boot.formatted-version}
+${AnsiColor.DEFAULT}${AnsiBackground.DEFAULT}
+
+Java Version: ${JavaVersion.current().toString()}
